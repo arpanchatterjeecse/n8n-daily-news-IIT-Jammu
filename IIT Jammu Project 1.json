@@ -1,0 +1,229 @@
+{
+  "name": "IIT Jammu Project 1",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.xml",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        0
+      ],
+      "id": "c8bce263-1556-49b2-9511-7699aea28779",
+      "name": "XML"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "daysInterval": 0,
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -560,
+        0
+      ],
+      "id": "8a45c9b9-09e0-461e-8f10-ab78eb84b03f",
+      "name": "Daily Cron"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "462b6ebf-39e4-4c3a-a424-c02c0e8c087e",
+              "name": "",
+              "value": "name",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        32,
+        0
+      ],
+      "id": "d5f650ff-e00e-4bc4-831c-3d24959636f8",
+      "name": "Parse RSS"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        0
+      ],
+      "id": "22ec5782-e39b-42d4-934b-5d3a50366796",
+      "name": "Format News Items"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "0e4c4a9a-b9ff-4ae3-99ba-a251d9f37287",
+      "name": "Combine News"
+    },
+    {
+      "parameters": {
+        "url": "https://a490-89-23-22397834587",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        656,
+        0
+      ],
+      "id": "c170d4fd-febd-4f34-a254-c84228251dbb",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "sendTo": "arpanchatterjeecse@outlook.com",
+        "subject": "NEWSLETTER DEMO",
+        "message": "Hi myself Arpan Chatterjee",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        864,
+        0
+      ],
+      "id": "38da2eea-08d6-46fb-9f4d-1c0291a5d622",
+      "name": "Send Email1",
+      "webhookId": "8674f13c-275e-465e-a251-da795324a8e7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "YDzkRSgAsdgkmb2i",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://news.google.com/rss/?hl=en-IN&gl=IN&ceid=IN:en",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -368,
+        0
+      ],
+      "id": "2dd7a201-e77d-407c-aef3-195d0bd37d09",
+      "name": "Google News RSS"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "XML": {
+      "main": [
+        [
+          {
+            "node": "Parse RSS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Daily Cron": {
+      "main": [
+        [
+          {
+            "node": "Google News RSS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse RSS": {
+      "main": [
+        [
+          {
+            "node": "Format News Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format News Items": {
+      "main": [
+        [
+          {
+            "node": "Combine News",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combine News": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Send Email1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google News RSS": {
+      "main": [
+        [
+          {
+            "node": "XML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "00e3f688-b69c-473f-b662-c5a5944a8456",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9d4b08d9306f123494739e2be82726cac5ceebfd0ae86421a18e8cf59408f35b"
+  },
+  "id": "Q8Bn1MeXnfcyMkhb",
+  "tags": []
+}
